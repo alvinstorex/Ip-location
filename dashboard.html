@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Pelacak</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f1f5f9;
+      color: #0f172a;
+      padding: 20px;
+    }
+    h1 { text-align: center; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background: white;
+    }
+    th, td {
+      border: 1px solid #cbd5e1;
+      padding: 8px 12px;
+      text-align: left;
+      font-size: 14px;
+    }
+    th {
+      background: #3b82f6;
+      color: white;
+    }
+    tr:nth-child(even) {
+      background: #f9fafb;
+    }
+  </style>
+</head>
+<body>
+  <h1>Dashboard Log Pelacakan</h1>
+  <table id="logTable">
+    <thead>
+      <tr>
+        <th>Waktu</th>
+        <th>IP</th>
+        <th>Kota</th>
+        <th>Wilayah</th>
+        <th>Negara</th>
+        <th>Koordinat</th>
+        <th>Provider</th>
+        <th>Perangkat</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    async function loadLogs() {
+      const res = await fetch("logs.json?_=" + Date.now());
+      const data = await res.json();
+      const tbody = document.querySelector("#logTable tbody");
+
+      tbody.innerHTML = "";
+      data.reverse().forEach((log) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${log.time}</td>
+          <td>${log.ip}</td>
+          <td>${log.city}</td>
+          <td>${log.region}</td>
+          <td>${log.country}</td>
+          <td>${log.latitude}, ${log.longitude}</td>
+          <td>${log.org}</td>
+          <td>${log.ua}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    loadLogs();
+  </script>
+</body>
+</html>
